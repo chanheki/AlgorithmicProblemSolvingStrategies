@@ -1,5 +1,14 @@
 # AlgorithmicProblemSolvingStrategies
-Algorithm Book Study
+
+## [Git Submodule](https://github.com/Byters-BookClub/Algorithms_expedition)
+
+---
+
+## [Git discussions](https://github.com/Byters-BookClub/Algorithms_expedition/discussions)
+
+---
+
+Algorithm solving strategies
 
 1. Read and understand the problem
 
