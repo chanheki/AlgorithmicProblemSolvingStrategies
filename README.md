@@ -25,3 +25,5 @@ Algorithm solving strategies
 ## [Week01](#)
 
 ## [Week02](https://github.com/Byters-BookClub/Algorithms_expedition/discussions/5)
+
+## [Week03](https://github.com/Byters-BookClub/Algorithms_expedition/discussions/9)
