@@ -1,4 +1,4 @@
-# 동적 계획법
+# [동적 계획법](https://chanhhh.tistory.com/166)
 
 ## 도입
 
@@ -167,15 +167,29 @@ jump()는 한 번 호출될 때마다 여기서 아래로 뛸지 오른쪽으로
 기저 사례를 확인하는 부분을 제외하고 점화식과 완전히 똑같음을 알 수 있다.
 
 ``` Swift
-var n: Int
-var board = Array(repeating: Array(repeating: 0, count: 100), count: 100)
-func jump(_ y: Int, _ x: Int) -> Bool {
+var re = Int(readLine()!)!
+
+for _ in 0..<re {
+	solution()
+}
+
+func solution() {
+	var n: Int = Int(readLine()!)!
+	var board = [[Int]]()
+	for _ in 0..<n {
+		board.append(readLine()!.split{$0==" "}.map{Int(String($0))!})
+	}
+	print(jump(0, 0, n, board))
+}
+
+func jump(_ y: Int, _ x: Int,_ n: Int, _ board: [[Int]]) -> Bool {
 	// 기저 사례: 게임판 밖을 벗어난 경우
 	if y >= n || x >= n { return false }
 	// 기저 사례: 마지막 칸에 도착한 경우
 	if y == n-1 && x == n-1 { return true }
-	jumpsize = board[y][x]
-	return jump(y + jumpsize, x) || jump(y, x + jumpsize)
+	var jumpsize = board[y][x]
+	var result = jump(y + jumpsize, x, n, board) || jump(y, x + jumpsize, n, board)
+	return result
 }
 ```
 
@@ -199,18 +213,20 @@ func jump(_ y: Int, _ x: Int) -> Bool {
 반환값이 Int형이라는데 유의할 것.
 
 ``` Swift
-var n: Int
-var board = Array(repeating: Array(repeating: 0, count: 100), count: 100)
-var cache = Array(repeating: Array(repeating: 0, count: 100), count: 100) 
-func jump2(_ y: Int, _ x: Int) -> Int {
+func jump2(_ y: Int, _ x: Int,_ n: Int, _ board: [[Int]], _ cache: inout [[Bool]]) -> Bool {
+	var ret: Bool
+	var jumpsize: Int
 	// 기저 사례 처리
 	if y >= n || x >= n { return false }
-	if y == n-1 && x == n-1 { return true }
-	// 메모이제이션
-	var ret = cache[y][x]
-	if ret != -1 { return ret }
-	var jumpsize = board[y][x]
-	return ret = jump(y + jumpsize, x) || jump(y, x + jumpsize)
+	if y == n-1 && x == n-1 {
+		cache[y][x] = true
+		return true 
+		}
+	ret = cache[y][x]
+	if ret != false { return ret }
+	jumpsize = board[y][x]
+	ret = jump2(y + jumpsize, x, n, board, &cache) || jump2(y, x + jumpsize, n, board, &cache)
+	return ret
 }
 ```
 
@@ -237,7 +253,7 @@ func jump2(_ y: Int, _ x: Int) -> Int {
 ## 다른 구현 방법에 관하여
 
 물론 재귀 호출을 이용하지 않고도 동적 계획법 알고리즘을 구현할 수 있다.
-이런 방법을 반복적 동적 계획법이라고 부른다. 반복적 동적 계획법에도 많은 장점이 있지만, 메모이제이션을 통한 접근이 좀더 직꽌적이기 때문에 이 장에서는 기본적으로 모든 동적 계획법 알고리즘을 재귀 호출을 통해 구현.
+이런 방법을 반복적 동적 계획법이라고 부른다. 반복적 동적 계획법에도 많은 장점이 있지만, 메모이제이션을 통한 접근이 좀더 직관적이기 때문에 이 장에서는 기본적으로 모든 동적 계획법 알고리즘을 재귀 호출을 통해 구현.
 
 ---
 
@@ -298,3 +314,77 @@ babbbc
 단순하게는 * 다음에 출현하는 글자가 나올 때 까지 대응시킬 수 있습니다만, 이래서는 입력의 세번 째 예제를 제대로 해결할 수없음. 이럴때 우리가 할 수 있는 가장 쉬운 방법은 완전탐색.
 
 주어진 패턴이 m개의 *을 포함한다고 했을 때, 이 패턴을 *가 나타날 때마다 쪼개면 이 패턴이 문자열에 대응되는지 확인 하는 문제를 m+1조각으로 나눌 수 있다.
+
+예를 들어 ` *t*l?*o*r?ng*s* `는 [`t*`, `l?*`, `o*`, `r?ng*`, `s`]의 다섯 조각으로 쪼갤 수 있다. 문자열 `thelordoftherings`가 주어질 때 우리의 완전 탐색 함수는 이 문자열 중 모두 몇 글자가 첫 번째 조각에 대응될지를 찾아 내기 위해 모든 경우의 수를 다 시도 해본다. 만약 첫 번째 조각에 세 글자가 대응된다면, 나머지 문자열 `lordoftherings`가 나머지 네 개의 패턴 조각들에 대응되는지 여부를 재귀 호출로 파악 가능
+
+``` swift
+
+// 완전탐색
+
+// 와일드 카드 패턴 w가 문자열 s에 대응되는지 여부를 반환
+func match(_ W: String, _ S: String) -> Bool {
+	// w[pos]와 s[pos]를 맞춰나간다.
+	let w = W.map{String($0)}
+	let s = S.map{String($0)}
+	var pos = 0
+	while pos < s.count && pos < w.count && (w[pos] == "?" || s[pos] == w[pos]) {
+		pos += 1
+	}
+	// 더이상 대응할 수 없으면 왜 while문이 끝났는지 확인한다.
+	// 2. 패턴 끝에 도달해서 끝난경우: 문자열도 끝났어야 대응됨
+	if pos == w.count { return pos == s.count }
+	// 4. *을 만나서 끝난 경우: *에 몇 글자를 대응해야 할지 재귀 호출하면서 확인한다.
+	if w[pos] == "*" {
+		for skip in pos...s.count {
+			if match((w[pos+1..<w.count]).joined(), (s[skip..<s.count]).joined()) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+```
+
+``` swift
+
+// 메모이제이션 기법을 사용해서 푼 풀이
+
+func match(_ w: String, _ s: String) -> Bool {
+	// w[pos]와 s[pos]를 맞춰나간다.
+	let W = w.map{String($0)}
+	let S = s.map{String($0)}
+
+	return matchMemoized(0, 0) != 0 ? true : false
+	
+	// 와일드카드 패턴 W[w...]가 문자열 S[s...]에 대응되는지 여부를 반환합니다.
+	func matchMemoized(_ w: Int, _ s: Int) -> Int {
+		// 메모이제이션
+		var ret = cache[w][s]
+		if ret != -1 { return ret }
+		// W[w]와 S[s]를 맞춰 나간다.
+		while s < S.count && w < W.count && (W[w] == "?" || W[w] == S[s]) {
+			ret = matchMemoized(w+1, s+1)
+		}
+		// 더이상 대응할 수 없으면 왜 while문이 끝났는지 확인.
+		// 2. 패턴 끝에 도달해서 끝난경우: 문자열도 끝났어야 대응됨(참)
+		if w == W.count {
+			if s == S.count { ret = 1 }
+			return ret
+		}
+		// 4. *을 만나서 끝난경우 *에 몇글자를 대응해야 할지 재귀 호출 하면서 확인한다.
+		if W[w] == "*" {
+//			for skip in s...S.count {
+			if (matchMemoized(w+1, s) != 0) || (s < S.count && (matchMemoized(w+1, s) != 0)) {
+					ret = 1
+					return ret
+				}
+//			}
+		}
+		// 3. 이 외의 경우에는 모두 대응되지 않는다.
+		ret = 0
+		return ret
+	}
+}
+
+```
