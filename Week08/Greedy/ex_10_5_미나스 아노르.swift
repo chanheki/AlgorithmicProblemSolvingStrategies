@@ -1,3 +1,11 @@
+/**
+ * @author chanhihi
+ * @email chanhihi55@gmail.com
+ * @create date 2023/04/28
+ * @modify date 2023/04/28
+ * @desc [탐욕법 Greedy / 기하 geometry]
+ */
+
 // 미나스 아노르 문제의 원들을 중심각의 구간으로 바꾸기
 
 // math 쓰려고 사용
