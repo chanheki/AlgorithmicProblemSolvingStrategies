@@ -1,3 +1,10 @@
+/**
+ * @author chanhihi
+ * @email chanhihi55@gmail.com
+ * @create date 2023/04/28
+ * @modify date 2023/04/28
+ * @desc [탐욕법 Greedy / 최소 큐 priority queue]
+ */
 
 //문자열들의 길이가 주어질 때 하나로 합치는 최소 비용을 반환한다.
 func concat(lengths: [Int]) -> Int {
