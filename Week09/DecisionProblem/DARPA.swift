@@ -31,6 +31,6 @@ func optimize(location: [Double], cameras: Int) -> Double {
 		} else {
 			hi = mid
 		}
-	}
+	}78
 	return lo
 }
