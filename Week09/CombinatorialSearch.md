@@ -319,11 +319,11 @@ https://www.math.uwaterloo.ca/tsp/index.html
 
 getCandidate(len, sum, known[]) 
 
-[후보 구하기 구현 🔗](CombinatorialSearch/ex/KAKURO2.swift:17:01)
+[후보 구하기 구현 🔗](CombinatorialSearch/ex/KAKURO2.swift)
 
 ### 후보의 수 빠르게 계산하기
 
-[메모이제이션 구현 🔗](CombinatorialSearch/ex/KAKURO2.swift:36:01)
+[메모이제이션 구현 🔗](CombinatorialSearch/ex/KAKURO2.swift)
 
 ### 더 읽을 거리
 
